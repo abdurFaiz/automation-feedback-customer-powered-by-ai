@@ -1,0 +1,16 @@
+id,date,source,customer_name,rating,review_text,sentiment,category,tags,priority,issue,suggestion,status,impact_score
+1,2026-01-20T10:30:00Z,Google Maps,Budi Santoso,4,"Kopinya enak, tapi antriannya kacau banget pas jam makan siang...",Positive,Operations,"Queue;Service",High,Long Queue,"Optimasi sistem kasir & tambah 1 Barista di jam 12:00 - 14:00.",Pending,8
+2,2026-01-19T14:15:00Z,Google Maps,Sarah Wijaya,2,"WiFi sering disconnect, susah buat kerja remote di sini...",Negative,Facilities,"Wifi;WFC",High,Unstable Wifi,"Upgrade router ke dual-band & tambah access point di area outdoor.",Pending,9
+3,2026-01-18T19:00:00Z,Zomato,Rina Amelia,3,"Menu makanannya kurang variatif, pengen ada opsi sehat...",Neutral,Menu,"Food;Variety",Medium,Limited Menu,"Tambahkan 3-5 menu sehat seperti salad bowl & smoothie bowl.",New,5
+4,2026-01-18T13:45:00Z,Google Maps,Dimas Pratama,3,"Tempatnya bagus tapi AC-nya terlalu dingin, nggak nyaman...",Neutral,Comfort,"AC;Temperature",Low,Temperature Issue,"Atur zona suhu berbeda & sediakan selimut untuk pelanggan.",Resolved,3
+5,2026-01-17T09:20:00Z,TripAdvisor,John Doe,1,"Pelayanannya lambat banget, nunggu 20 menit buat 1 kopi...",Negative,Service,"Wait Time;Staff",High,Slow Service,"Implementasi sistem order digital & optimasi workflow barista.",Pending,8
+6,2026-01-16T15:30:00Z,Google Maps,Linda Kusuma,5,"Suka banget sama suasana dan playlist lagunya!",Positive,Ambiance,"Music;Vibe",Low,None,None,New,0
+7,2026-01-16T11:00:00Z,GoFood,Ahmad Rizki,4,"Kopi susu gula aren nya juara.",Positive,Product,"Coffee;Taste",Low,None,None,New,0
+8,2026-01-15T20:10:00Z,Google Maps,Siti Nurhaliza,2,"Toiletnya kotor dan bau, tolong diperhatikan.",Negative,Facilities,"Toilet;Cleanliness",High,Hygiene Issue,"Jadwal pembersihan toilet diperketat setiap 1 jam.",New,9
+9,2026-01-15T16:45:00Z,Google Maps,Eko Prasetyo,3,"Harganya agak mahal untuk ukuran porsi segini.",Neutral,Value,"Price;Portion",Medium,Price Perception,"Review pricing strategy atau tambah side dish kecil.",New,6
+10,2026-01-14T12:00:00Z,Social Media,Vina Dewi,5,"Best place for WFC in town!",Positive,Facilities,"WFC;Space",Low,None,None,New,0
+11,2026-01-14T08:30:00Z,Google Maps,Doni Kurniawan,1,"Internet mati total pas lagi meeting penting.",Negative,Facilities,"Wifi;Internet",High,No Internet,"Pastikan backup koneksi internet tersedia.",Resolved,10
+12,2026-01-13T18:15:00Z,Zomato,Maya Sari,4,"Dessert nya enak, tapi sayang cake nya habis.",Positive,Menu,"Stock;Dessert",Medium,Stockout,"Perbaiki manajemen inventory untuk item populer sore hari.",New,4
+13,2026-01-12T14:20:00Z,Google Maps,Reza Rahardian,2,"Berisik banget, ga cocok buat ngobrol santai.",Negative,Ambiance,"Noise;Crowd",Medium,Noise Level,"Pasang peredam suara atau atur layout meja.",New,5
+14,2026-01-11T10:00:00Z,TripAdvisor,Clara,5,"Baristanya ramah banget dan helpfull.",Positive,Service,"Staff;Friendliness",Low,None,None,New,0
+15,2026-01-10T13:40:00Z,Google Maps,Fajar,3,"Parkir susah banget kalau bawa mobil.",Neutral,Facilities,"Parking;Access",Medium,Parking Issue,"Kerjasama dengan valet atau lokasi parkir terdekat.",New,6

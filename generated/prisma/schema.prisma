@@ -1,0 +1,472 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String?
+  access_token             String?
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String?
+  session_state            String?
+  refresh_token_expires_in Int?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String            @id @default(cuid())
+  name          String?
+  firstName     String?
+  lastName      String?
+  email         String?           @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  accounts      Account[]
+  businesses    Business[]
+  gmapsPlaces   GoogleMapsPlace[]
+  sessions      Session[]
+
+  @@index([email])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model GoogleMapsPlace {
+  id            String             @id @default(cuid())
+  placeId       String             @unique
+  name          String
+  rating        Float?
+  totalReviews  Int                @default(0)
+  address       String?
+  phone         String?
+  website       String?
+  photoUrl      String?
+  latitude      Float?
+  longitude     Float?
+  googleMapsUrl String?
+  businessId    String?
+  lastSynced    DateTime           @default(now())
+  syncEnabled   Boolean            @default(true)
+  userId        String
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  datasetId     String?
+  business      Business?          @relation(fields: [businessId], references: [id])
+  dataset       Dataset?           @relation(fields: [datasetId], references: [id])
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviews       GoogleMapsReview[]
+
+  @@index([placeId])
+  @@index([userId])
+  @@index([businessId])
+  @@index([datasetId])
+  @@index([lastSynced])
+}
+
+model GoogleMapsReview {
+  id             String          @id @default(cuid())
+  gmapsPlaceId   String
+  authorName     String?
+  authorPhotoUrl String?
+  rating         Int
+  text           String?
+  timePosted     DateTime
+  googleReviewId String?         @unique
+  authorLevel    String?
+  likeCount      Int?
+  sentimentScore Float?
+  syncedToReview Boolean         @default(false)
+  reviewId       String?         @unique
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  datasetId      String?
+  dataset        Dataset?        @relation(fields: [datasetId], references: [id])
+  gmapsPlace     GoogleMapsPlace @relation(fields: [gmapsPlaceId], references: [id], onDelete: Cascade)
+  review         Review?         @relation(fields: [reviewId], references: [id])
+
+  @@index([gmapsPlaceId])
+  @@index([timePosted])
+  @@index([syncedToReview])
+  @@index([datasetId])
+}
+
+model Business {
+  id                String              @id @default(cuid())
+  name              String
+  description       String?
+  type              String?
+  address           String?
+  city              String?
+  country           String?
+  googlePlaceId     String?             @unique
+  googleMapsUrl     String?
+  tagline           String?
+  amenities         String[]            @default([])
+  serviceStyle      String?
+  avgDailyGuests    String?
+  openingHours      String?
+  staffPerShift     String?
+  primaryAudience   String?
+  valueProposition  String?
+  returnCycle       String?
+  criticalThreshold String?
+  primaryGoal       String?
+  targetKpi         String?
+  ownerId           String
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  insights          ActionableInsight[]
+  owner             User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  metrics           BusinessMetric[]
+  datasets          Dataset[]
+  gmapsPlaces       GoogleMapsPlace[]
+  reviews           Review[]
+  surveys           Survey[]
+  urgentIssues      UrgentIssue[]
+
+  @@index([ownerId])
+  @@index([googlePlaceId])
+}
+
+model Review {
+  id             String              @id @default(cuid())
+  businessId     String
+  customerName   String?
+  customerEmail  String?
+  rating         Float?
+  comment        String
+  source         ReviewSource        @default(GOOGLE_MAPS)
+  sourceUrl      String?
+  externalId     String?
+  reviewerLevel  String?
+  likeCount      Int?
+  sentimentType  SentimentType?
+  sentimentScore Float?
+  aiAnalyzed     Boolean             @default(false)
+  aiAnalyzedAt   DateTime?
+  reviewDate     DateTime            @default(now())
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  gmapsReview    GoogleMapsReview?
+  business       Business            @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  categories     ReviewCategory[]
+  insights       ActionableInsight[] @relation("ActionableInsightToReview")
+
+  @@unique([source, externalId])
+  @@index([businessId])
+  @@index([sentimentType])
+  @@index([reviewDate])
+  @@index([source])
+}
+
+model Category {
+  id              String                   @id @default(cuid())
+  name            String                   @unique
+  description     String?
+  color           String?
+  icon            String?
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+  insights        ActionableInsight[]
+  reviews         ReviewCategory[]
+  surveyResponses SurveyResponseCategory[]
+}
+
+model ReviewCategory {
+  id         String   @id @default(cuid())
+  reviewId   String
+  categoryId String
+  confidence Float?
+  createdAt  DateTime @default(now())
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  review     Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, categoryId])
+  @@index([reviewId])
+  @@index([categoryId])
+}
+
+model ActionableInsight {
+  id              String           @id @default(cuid())
+  businessId      String
+  customerInput   String
+  aiSolution      String
+  categoryId      String
+  impactLevel     ImpactLevel      @default(MEDIUM)
+  status          InsightStatus    @default(PENDING)
+  implementedAt   DateTime?
+  dismissedAt     DateTime?
+  actionNotes     String?
+  confidence      Float?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  actions         Action[]
+  business        Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  category        Category         @relation(fields: [categoryId], references: [id])
+  recoveryMetrics RecoveryMetric[]
+  basedOnReviews  Review[]         @relation("ActionableInsightToReview")
+
+  @@index([businessId])
+  @@index([categoryId])
+  @@index([impactLevel])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model BusinessMetric {
+  id                    String   @id @default(cuid())
+  businessId            String
+  date                  DateTime @db.Date
+  totalReviews          Int      @default(0)
+  positiveReviews       Int      @default(0)
+  neutralReviews        Int      @default(0)
+  negativeReviews       Int      @default(0)
+  averageRating         Float?
+  averageSentimentScore Float?
+  urgentIssuesCount     Int      @default(0)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  business              Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, date])
+  @@index([businessId])
+  @@index([date])
+}
+
+model RecoveryMetric {
+  id                 String            @id @default(cuid())
+  insightId          String
+  issueIdentifiedAt  DateTime
+  solutionAppliedAt  DateTime?
+  issueResolvedAt    DateTime?
+  recoveryTimeDays   Int?
+  sentimentBefore    Float?
+  sentimentAfter     Float?
+  reviewVolumeBefore Int?
+  reviewVolumeAfter  Int?
+  improvementPercent Float?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  insight            ActionableInsight @relation(fields: [insightId], references: [id], onDelete: Cascade)
+
+  @@index([insightId])
+  @@index([issueIdentifiedAt])
+}
+
+model Action {
+  id           String            @id @default(cuid())
+  insightId    String
+  title        String
+  description  String
+  actionType   ActionType        @default(OTHER)
+  cost         Float?
+  effort       String?
+  plannedDate  DateTime?
+  executedDate DateTime?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  insight      ActionableInsight @relation(fields: [insightId], references: [id], onDelete: Cascade)
+
+  @@index([insightId])
+  @@index([executedDate])
+}
+
+model UrgentIssue {
+  id            String    @id @default(cuid())
+  businessId    String
+  issue         String
+  description   String?
+  customerCount Int       @default(1)
+  periodStart   DateTime
+  periodEnd     DateTime
+  isResolved    Boolean   @default(false)
+  resolvedAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  business      Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId])
+  @@index([isResolved])
+  @@index([periodStart])
+}
+
+model Dataset {
+  id           String             @id @default(cuid())
+  name         String
+  description  String?
+  fileUrl      String
+  fileType     String             @default("text/csv")
+  rowCount     Int                @default(0)
+  status       DatasetStatus      @default(PENDING)
+  errorMessage String?
+  businessId   String
+  uploadedBy   String?
+  processedAt  DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  surveyId     String?
+  business     Business           @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  survey       Survey?            @relation(fields: [surveyId], references: [id])
+  gmapsPlaces  GoogleMapsPlace[]
+  gmapsReviews GoogleMapsReview[]
+
+  @@index([businessId])
+  @@index([surveyId])
+  @@index([status])
+}
+
+model Survey {
+  id          String           @id @default(cuid())
+  title       String
+  description String?
+  isActive    Boolean          @default(true)
+  icon        String?
+  color       String?
+  businessId  String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  views       Int              @default(0)
+  datasets    Dataset[]
+  business    Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  questions   SurveyQuestion[]
+  responses   SurveyResponse[]
+
+  @@index([businessId])
+}
+
+model SurveyQuestion {
+  id       String         @id @default(cuid())
+  surveyId String
+  type     String
+  question String
+  options  String[]
+  required Boolean        @default(false)
+  order    Int            @default(0)
+  answers  SurveyAnswer[]
+  survey   Survey         @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  @@index([surveyId])
+}
+
+model SurveyResponse {
+  id             String                   @id @default(cuid())
+  surveyId       String
+  respondent     String?
+  createdAt      DateTime                 @default(now())
+  answers        SurveyAnswer[]
+  survey         Survey                   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  aiAnalyzed     Boolean                  @default(false)
+  sentimentType  SentimentType?
+  sentimentScore Float?
+  categories     SurveyResponseCategory[]
+
+  @@index([surveyId])
+  @@index([aiAnalyzed])
+}
+
+model SurveyResponseCategory {
+  id         String   @id @default(cuid())
+  responseId String
+  categoryId String
+  confidence Float?
+  createdAt  DateTime @default(now())
+
+  category Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  response SurveyResponse @relation(fields: [responseId], references: [id], onDelete: Cascade)
+
+  @@unique([responseId, categoryId])
+  @@index([responseId])
+  @@index([categoryId])
+}
+
+model SurveyAnswer {
+  id         String         @id @default(cuid())
+  responseId String
+  questionId String
+  answer     String
+  question   SurveyQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  response   SurveyResponse @relation(fields: [responseId], references: [id], onDelete: Cascade)
+
+  @@index([responseId])
+  @@index([questionId])
+}
+
+enum ReviewSource {
+  GOOGLE_MAPS
+  FACEBOOK
+  INSTAGRAM
+  TWITTER
+  MANUAL
+  OTHER
+}
+
+enum SentimentType {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+  MIXED
+}
+
+enum ImpactLevel {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum InsightStatus {
+  PENDING
+  ACKNOWLEDGED
+  IN_PROGRESS
+  COMPLETED
+  DISMISSED
+}
+
+enum ActionType {
+  PROCESS_CHANGE
+  TRAINING
+  FACILITY_UPGRADE
+  MENU_CHANGE
+  POLICY_UPDATE
+  OTHER
+}
+
+enum DatasetStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}

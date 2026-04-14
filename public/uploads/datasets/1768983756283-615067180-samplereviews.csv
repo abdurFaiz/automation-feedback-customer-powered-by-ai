@@ -1,0 +1,6 @@
+review_id,date,platform,rating,author_name,content,sentiment,category,keywords,impact_score,action_status,ai_suggested_solution
+REV001,2024-01-20T10:00:00Z,Google Maps,5,Alice Smith,Great coffee and cozy vibe.,Positive,Ambiance,"Coffee, Cozy",Low,Resolved,Keep up the good work!
+REV002,2024-01-20T11:30:00Z,Instagram,2,John Doe,Wait time was way too long for a latte.,Negative,Service,"Wait time, Latte",Medium,New,Optimize barista workflow during peak hours.
+REV003,2024-01-21T09:15:00Z,GoFood,4,Emily Chen,Food was delicious but arrived cold.,Positive,Food Quality,"Delicious, Cold",Low,Pending,Improve packaging insulation.
+REV004,2024-01-21T14:00:00Z,Google Maps,1,Michael Brown,Found a hair in my soup. Unacceptable.,Negative,Food Quality,"Hygiene, Soup",High,New,Immediate apology and refund procedure review.
+REV005,2024-01-22T08:45:00Z,TikTok,3,Sarah Wilson,Nice place but music is too loud to study.,Neutral,Ambiance,"Music, Study",Low,Ignored,Adjust volume levels during morning hours.
