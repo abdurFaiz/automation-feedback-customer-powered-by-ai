@@ -1,15 +1,15 @@
-# 🌪️ Spinofy Feedback Insights
+# 🌪️ Customer Feedback Insights
 
 **Closing the Gap Between What Customers Say and What Businesses Do**
 
-Spinofy Feedback Insights is a state-of-the-art Feedback Management System (FMS) designed to transform raw customer reviews into actionable business intelligence. Built for high-stakes service industries like coffee shops, retail, and hospitality, Spinofy doesn't just display data—it monitors the Impact Velocity of every operational change you make.
+Customer Feedback Insights is a state-of-the-art Feedback Management System (FMS) designed to transform raw customer reviews into actionable business intelligence. Built for high-stakes service industries like coffee shops, retail, and hospitality, Customer doesn't just display data—it monitors the Impact Velocity of every operational change you make.
 
-![alt text](https://raw.githubusercontent.com/your-username/spinofy/main/public/og-image.png)
+![alt text](https://raw.githubusercontent.com/your-username/Customer/main/public/og-image.png)
 *(Note: Replace with your actual dashboard screenshot)*
 
 ## 🚀 The Core Philosophy: "The Loop"
 
-Unlike traditional analytics that stop at insights, Spinofy is built on a continuous improvement cycle:
+Unlike traditional analytics that stop at insights, Customer is built on a continuous improvement cycle:
 
 1. **Hear**: Ingest data from Google Maps Reviews, Spreadsheets, and direct inputs.
 2. **Analyze**: AI-driven sentiment scoring and categorical classification (Product, Staff, Wifi, etc.).
@@ -23,7 +23,7 @@ Unlike traditional analytics that stop at insights, Spinofy is built on a contin
 - 💰 **Revenue Risk**: AI-estimated monthly loss based on customer churn and negative sentiment trends.
 - ⚡ **AI SOP Generator**: Automatic generation of operational Standard Operating Procedures based on detected issues.
 - 📊 **Sentiment breakdown**: Granular analysis of Business Pillars (Service, Hygiene, Product, Atmosphere).
-- 🔒 **Shared SSO**: Seamless authentication between the core app and the analytical suite under the spinofy.id ecosystem.
+- 🔒 **Shared SSO**: Seamless authentication between the core app and the analytical suite under the Customer.id ecosystem.
 
 ## 🛠️ Tech Stack
 
@@ -61,7 +61,7 @@ This project is built with the modern [T3 Stack](https://create.t3.gg/) and addi
 ## 📁 Project Structure
 
 ```
-spinofy-feedback-insights/
+Customer-feedback-insights/
 ├── prisma/                    # Database schema and migrations
 │   └── schema.prisma         # Prisma schema definition
 ├── public/                   # Static assets
@@ -113,8 +113,8 @@ spinofy-feedback-insights/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/spinofy-feedback-insights.git
-cd spinofy-feedback-insights
+git clone https://github.com/your-username/Customer-feedback-insights.git
+cd Customer-feedback-insights
 ```
 
 ### 2. Install Dependencies
@@ -135,7 +135,7 @@ Edit `.env` with your configuration:
 
 ```env
 # Database
-DATABASE_URL="postgresql://username:password@localhost:5432/spinofy_db"
+DATABASE_URL="postgresql://username:password@localhost:5432/Customer_db"
 
 # NextAuth.js
 NEXTAUTH_SECRET="your-secret-key"
@@ -150,7 +150,7 @@ EMAIL_SERVER_HOST="smtp.gmail.com"
 EMAIL_SERVER_PORT=587
 EMAIL_SERVER_USER="your-email@gmail.com"
 EMAIL_SERVER_PASSWORD="your-app-password"
-EMAIL_FROM="noreply@spinofy.id"
+EMAIL_FROM="noreply@Customer.id"
 ```
 
 ### 4. Database Setup
@@ -238,10 +238,10 @@ The app uses NextAuth.js v5 with:
 
 ```bash
 # Build Docker image
-docker build -t spinofy-feedback-insights .
+docker build -t Customer-feedback-insights .
 
 # Run container
-docker run -p 3000:3000 spinofy-feedback-insights
+docker run -p 3000:3000 Customer-feedback-insights
 ```
 
 ### Manual Deployment
